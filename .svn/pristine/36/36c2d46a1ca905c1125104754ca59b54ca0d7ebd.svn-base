@@ -1,0 +1,82 @@
+
+public class HashTable {
+	
+	private HashNode[] hashTable;
+	private String[] lookupTable;
+	
+	HashTable(){
+		hashTable = new HashNode[10];
+		lookupTable = new String[10];
+	}
+	
+	public void insert(int value, String key){
+		int hashVal = hash(key);		
+		hashTable[hashVal] = new HashNode(key, value, hashTable[hashVal]);
+		addToLookupTable(key, value);		
+		
+	}
+	
+	public Integer find(String key){
+		int hashVal = hash(key);
+		for(HashNode n = hashTable[hashVal]; n != null; n = n.getNext())
+			if (n.getKey().equals(key))
+				return n.getValue();
+		return null;
+	}
+	
+	public String getCity(int vertex){
+		return lookupTable[vertex];
+	}
+	
+	public void delete(String key){
+		int hashVal = hash(key);
+		HashNode prev = null;
+		HashNode curr = hashTable[hashVal];
+		int i = 0;
+		
+		while(curr != null){
+			
+			if (curr.getKey().equals(key)){
+				
+				if(i == 0)
+					hashTable[hashVal] = hashTable[hashVal].getNext();
+				
+				else
+					prev.setNext(curr.getNext());
+				break;
+			}
+			
+			prev = curr;
+			curr = curr.getNext();
+			i++;
+		}
+	}
+	
+	private int hash(String key){
+		int h = 0;
+		long g;
+		int i;
+		
+		for(i = 0; i < key.length(); i++){
+			h = (h << 4) + (int)key.charAt(i);
+			g = h & 0xF0000000L;
+			if (g != 0)
+				h ^= g >>>24;
+			h &= ~g;
+		}
+		return h % 10;
+	}
+	
+
+	public void addToLookupTable(String key, int value){
+		if(value == lookupTable.length){
+			String[] newLookupTable = new String[lookupTable.length * 2];
+			for(int i = 0; i < lookupTable.length; i++){
+				newLookupTable[i] = lookupTable[i];
+			}
+			lookupTable = newLookupTable;
+		}
+		lookupTable[value] = key;
+	}
+	
+}

@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class InputFileReader {
+	
+	BufferedReader br;
+	InputFileReader(String fileName){
+		try {
+			br = new BufferedReader(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Unable to find file.");
+		}
+	}
+	
+	public HashTable createTables(){
+		
+		HashTable tables = null;
+		HashNode[] cities = new HashNode[1];
+
+		try {
+			String currLine = br.readLine();
+			int value = 0;
+			while(!currLine.equals(".")){
+				cities[0] = new HashNode(currLine, value, cities[0]);
+				currLine = br.readLine();
+				value ++;
+			}
+			tables = new HashTable();
+			for(HashNode node = cities[0]; node != null; node = node.getNext()){
+				tables.addToLookupTable(node.getKey(), node.getValue());
+				tables.insert(node.getValue(), node.getKey());
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Unable to create tables.");
+		}
+		finally{
+			return tables;
+		}
+	}
+	
+}

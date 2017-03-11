@@ -1,0 +1,11 @@
+
+public class Dijkstra {
+	
+	public static void main(String[] args){
+		Graph g = new Graph(args[0]);
+		g.createTables();
+		g.printAdjList();
+		g.runDjikstra();
+		g.printShortestPaths();
+	}
+}

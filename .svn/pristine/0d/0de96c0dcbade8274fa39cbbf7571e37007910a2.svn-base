@@ -1,0 +1,166 @@
+/**
+ * This class uses a hash table that will
+ * hash strings and use that hash code to place
+ * them into an array. This hash table uses closed 
+ * hashing and open addressing. 
+ * 
+ * A lookup table mapping vertex number to strings is also created.
+ * @author lancefernando
+ *
+ */
+public class HashTable {
+	
+	private HashNode[] hashTable;
+	private String[] lookupTable;
+	
+	HashTable(){
+		hashTable = new HashNode[10];
+		lookupTable = new String[10];
+	}
+	
+	/**
+	 * Inserts a node node into the hashTable after calculating
+	 * its hash value given the key. It then adds the key:value pair
+	 * to the lookup table.
+	 * 
+	 * @param value
+	 * 		Given value (vertex)
+	 * @param key
+	 * 		Given city name
+	 */
+	public void insert(int value, String key){
+		int hashVal = hash(key, hashTable.length);		
+		hashTable[hashVal] = new HashNode(key, value, hashTable[hashVal]);
+		addToLookupTable(key, value);		
+		
+	}
+	
+	/**
+	 * Method that rehashes the hashTable into a new
+	 * table with original size * 2. All nodes are rehashed
+	 * into the new table. 
+	 */
+	public void rehash(){
+		HashNode[] newHashTable = new HashNode[hashTable.length * 2];
+		for(int i = 0; i < hashTable.length; i ++){
+			for(HashNode node = hashTable[i]; node != null; node = node.getNext()){
+				int hashVal = hash(node.getKey(), newHashTable.length);
+				newHashTable[hashVal] = new HashNode(node.getKey(), node.getValue(), newHashTable[hashVal]);
+			}
+		}
+		hashTable = newHashTable;
+	}
+	
+	/**
+	 * Finds the vertex of a given city by hashing it
+	 * and searching through the hashtable at index hashVal.
+	 * 
+	 * @param key
+	 * 		City name
+	 * @return
+	 * 		Vertex of city if found.
+	 * 		Otherwise, null.
+	 */
+	public Integer find(String key){
+		int hashVal = hash(key, hashTable.length);
+		for(HashNode n = hashTable[hashVal]; n != null; n = n.getNext())
+			if (n.getKey().equals(key))
+				return n.getValue();
+		return null;
+	}
+	
+	/**
+	 * Looks at a specific index of the lookupTable and
+	 * returns the String city at that index.
+	 * 
+	 * @param vertex
+	 * 		Given vertex of city.
+	 * @return
+	 * 		String name of city.
+	 */
+	public String getCity(int vertex){
+		return lookupTable[vertex];
+	}
+	
+	/**
+	 * Finds the city in the hashTable and deletes it from
+	 * the hash table. It does this by hashing the city string and 
+	 * looking at that index in the table. 
+	 * 
+	 * @param key
+	 * 		Given city to delete.
+	 */
+	public void delete(String key){
+		int hashVal = hash(key, hashTable.length);
+		HashNode prev = null;
+		HashNode curr = hashTable[hashVal];
+		int i = 0;
+		
+		while(curr != null){
+			
+			if (curr.getKey().equals(key)){
+				
+				if(i == 0)
+					hashTable[hashVal] = hashTable[hashVal].getNext();
+				
+				else
+					prev.setNext(curr.getNext());
+				break;
+			}
+			
+			prev = curr;
+			curr = curr.getNext();
+			i++;
+		}
+	}
+	
+	/**
+	 * Elf hash function provided by David Galles.
+	 * Returns the elf hash value given the key
+	 * and the size of the table to mod by.
+	 * 
+	 * @param key
+	 * 		Given key to hash
+	 * @param size
+	 * 		Size of hash table
+	 * @return
+	 * 		Returns mod value
+	 */
+	private int hash(String key, int size){
+		int h = 0;
+		long g;
+		int i;
+		
+		for(i = 0; i < key.length(); i++){
+			h = (h << 4) + (int)key.charAt(i);
+			g = h & 0xF0000000L;
+			if (g != 0)
+				h ^= g >>>24;
+			h &= ~g;
+		}
+		return h % size;
+	}
+	
+	/**
+	 * Adds the key value pair to the lookup table. 
+	 * If the value is the size of the current lookupTable, it 
+	 * doubles the size of both the lookupTable and hashTable, and
+	 * places all values back into each table.
+	 * 
+	 * @param key
+	 * 		City name
+	 * @param value
+	 * 		Vertex value
+	 */
+	public void addToLookupTable(String key, int value){
+		if(value == lookupTable.length){
+			rehash();
+			String[] newLookupTable = new String[lookupTable.length * 2];
+			for(int i = 0; i < lookupTable.length; i++){
+				newLookupTable[i] = lookupTable[i];
+			}
+			lookupTable = newLookupTable;
+		}
+		lookupTable[value] = key;
+	}
+}

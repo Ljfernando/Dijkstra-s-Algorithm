@@ -1,0 +1,61 @@
+
+public class Graph {
+	
+	private AdjNode[] adjacencyList;
+	private HashTable ht;
+	
+	
+	Graph(){
+		adjacencyList = new AdjNode[10];
+		ht = new HashTable();
+	}
+	private class AdjNode{
+		int vertex;
+		int distance;
+		AdjNode next;
+		
+		AdjNode(int vertex, int distance, AdjNode next){
+			this.vertex = vertex;
+			this.distance = distance;
+			this.next = next;
+		
+		}
+
+		public int getVertex() {
+			return vertex;
+		}
+
+		public void setVertex(int vertex) {
+			this.vertex = vertex;
+		}
+
+		public int getDistance() {
+			return distance;
+		}
+
+		public void setDistance(int distance) {
+			this.distance = distance;
+		}
+
+		public AdjNode getNext() {
+			return next;
+		}
+
+		public void setNext(AdjNode next) {
+			this.next = next;
+		}
+		
+		
+	}
+	
+	public void addToAdjList(String from, String to, int distance){
+		
+		int start = ht.find(from);
+		int end = ht.find(to);
+		
+		adjacencyList[start] = new AdjNode(end, distance, adjacencyList[start]);
+		
+	}
+
+
+}

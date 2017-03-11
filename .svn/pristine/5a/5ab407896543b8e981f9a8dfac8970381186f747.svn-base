@@ -1,0 +1,62 @@
+
+public class HashTable {
+	
+	private HashNode[] hashTable;
+	private String[] lookupTable;
+	
+	HashTable(){
+		hashTable = new HashNode[10];
+		lookupTable = new String[10];
+	}
+	
+	public void insert(int value, String key){
+		int hashVal = hash(key);		
+		hashTable[hashVal] = new HashNode(key, value, hashTable[hashVal]);
+	}
+	
+	public Integer find(String key){
+		int hashVal = hash(key);
+		for(HashNode n = hashTable[hashVal]; n != null; n = n.getNext())
+			if (n.getKey().equals(key))
+				return n.getValue();
+		return null;
+	}
+	
+	public void delete(String key){
+		int hashVal = hash(key);
+		HashNode prev = null;
+		HashNode curr = hashTable[hashVal];
+		int i = 0;
+		
+		while(curr != null){
+			
+			if (curr.getKey().equals(key)){
+				
+				if(i == 0)
+					hashTable[hashVal] = hashTable[hashVal].getNext();
+				
+				else
+					prev.setNext(curr.getNext());
+				break;
+			}
+			
+			prev = curr;
+			curr = curr.getNext();
+			i++;
+		}
+	}
+	
+	private int hash(String key){
+		int hashValue = 0;
+		
+		for(int i = 0; i < key.length(); i++){
+			hashValue += (int) key.charAt(i);
+		}
+		return hashValue % 10;
+	}
+	
+	public void addToLookupTable(String key, int value){
+		lookupTable[value] = key;
+	}
+	
+}
