@@ -15,12 +15,17 @@ One you have created your array of vertex names and your hash table to look up v
 Once you have your graph, you are ready to run Dijkstra's algorithm, using Binomial Queues. Start with the specified initial vertex. Create an instance of the Dijksra table. All "cost" entries in the Dijkstra table (other than the intial vertex) should be infinity (you can use Integer.MAX_VALUE) and all "path" entries should be -1. Add all of the vertices to the BinomialQueue (with priority of Integer.MAX_VALUE, except for the initial vertex, with priority 0). While the priority queue is not empty, you will need to remove the element with the smallest cost, then update the costs of all of its neighbors – also updating the costs in the priority queue! Thus your priority queue will need some way of finding elements in the queue quickly. To do this, you should maintain an array of pointers into your Binomial Queue.   Once you have created the table, you will need to print out the cost of the shortest path from the intial vertex to all other vertices, as well as the path itself.  See the section on output format to get the formatting correct.
 
 So, while your algorithm is running, you will have the following data structures:
-	•	Graph (Adjacency List)
-	•	List used to associate vertex numbers with vertex names
-	•	Hash table used to associate vertex names with vertex numbers
-	•	Dijkstra Table
-	•	Binomial Queue (including an array of pointers into the queue for easy updating)
+	
+•	Graph (Adjacency List)
+	
+•	List used to associate vertex numbers with vertex names
+	
+•	Hash table used to associate vertex names with vertex numbers
+	
+•	Dijkstra Table
+	
+•	Binomial Queue (including an array of pointers into the queue for easy updating)
 
-Running The Program
+##**Running The Program**
 Simply run in command line with Test.txt as an argument
 
