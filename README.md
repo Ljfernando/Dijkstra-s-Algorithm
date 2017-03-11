@@ -1,3 +1,5 @@
+README from SPRING2016 CS 245: Data Structures and Algorithms. Instructor David Galles.
+
 For your final project, you will implement Dijksra's algorithm for finding the shortest path between a source vertex and all other vertices in the graph.  This project will combine Graphs, Dijkstra's Algorithm, Binomial Queues, Hash Tables and Lists (whew!).  
 
 
